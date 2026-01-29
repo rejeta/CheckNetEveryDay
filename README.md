@@ -18,7 +18,7 @@
 - **用户分析** - 特权账户统计、用户行为分析
 - **异常检测** - 夜间连接、高危端口、可疑模式
 
-### AI分析功能
+### AI分析+威胁情报分析功能
 - 🔍 **风险评估** - 自动计算风险等级（低/中/高）
 - ⚠️ **异常识别** - 检测可疑网络连接模式
 - 💡 **安全建议** - 基于分析结果提供具体建议
@@ -52,7 +52,7 @@ pip install jsonlines pandas numpy pyyaml requests python-dateutil chardet
 ### 3. 配置AI API密钥
 选择一个AI服务商并获取API密钥：
 
-#### 智谱AI（推荐）
+#### 智谱AI
 1. 访问 [智谱AI开放平台](https://open.bigmodel.cn/)
 2. 注册账号并获取API Key
 3. 配置到环境变量或配置文件：
@@ -146,37 +146,6 @@ python src/main.py --dir data/ --max-size 5
 python src/main.py --help
 ```
 
-## 📁 项目结构
-
-```
-CheckNetEveryDay/
-├── src/                          # 源代码目录
-│   ├── __init__.py
-│   ├── main.py                   # 主程序入口
-│   ├── config.py                # 配置管理模块
-│   ├── file_scanner.py          # 文件扫描模块
-│   ├── jsonl_parser.py          # JSONL解析模块
-│   ├── log_analyzer.py          # 日志分析核心模块
-│   ├── ai_client.py             # AI客户端
-│   ├── reporter.py              # 报告生成模块
-│   └── utils/                    # 工具函数
-│       ├── __init__.py
-│       ├── ip_utils.py           # IP地址处理
-│       ├── time_utils.py         # 时间处理
-│       └── stats.py              # 统计计算
-├── config/                       # 配置文件目录
-│   ├── config.yaml              # 主配置文件
-│   └── ai_providers.yaml        # AI服务商配置
-├── data/                        # 输入数据目录
-│   └── (放置.jsonl文件)
-├── output/                       # 输出目录
-│   └── (生成的报告)
-├── tests/                        # 测试用例
-├── examples/                     # 示例文件
-├── requirements.txt              # 依赖清单
-└── README.md                    # 项目说明
-```
-
 ## 🔧 配置说明
 
 ### 主配置文件 (config/config.yaml)
@@ -204,134 +173,7 @@ risk_threshold: medium
 
 包含各AI服务商的API基础URL、模型名称、超时时间等配置。
 
-## 📊 输出示例
-
-程序会生成包含以下内容的Markdown分析报告：
-
-1. **执行摘要** - 关键发现、风险等级
-2. **基础统计** - 连接数、IP数、进程数等
-3. **时间分布分析** - 高峰时段、异常时间
-4. **进程行为分析** - 系统进程、特权进程外网访问
-5. **IP访问分析** - Top IP地址、内外网分布
-6. **端口分析** - 常见端口、高危端口
-7. **用户分析** - 特权账户使用情况
-8. **AI安全分析** - 风险评估和安全建议
-9. **异常检测** - 详细异常信息
-10. **数据附录** - 完整统计数据
-
-## 🎯 使用场景
-
-### 网络安全分析
-- 检测异常连接和可疑IP/端口访问
-- 识别潜在的恶意活动
-- 生成安全评估报告
-
-### 系统运维监控
-- 分析网络流量模式
-- 监控进程网络行为
-- 识别异常流量趋势
-
-### 合规审计
-- 网络访问记录分析
-- 安全策略验证
-- 风险审计支持
-
-## 📋 支持的数据格式
-
-输入的JSONL文件每行应包含以下字段：
-
-```json
-{
-  "timestamp": "2026-01-21T18:30:47.7755863+08:00",
-  "process": "C:\\Windows\\System32\\svchost.exe",
-  "command_line": "",
-  "user": "NT AUTHORITY\\NETWORK SERVICE",
-  "dest_ip": "192.168.1.1",
-  "dest_port": "53",
-  "protocol": "udp",
-  "domain": "",
-  "source": "ip_only"
-}
-```
-
-## 🔧 故障排除
-
-### 常见问题
-
-1. **"未找到有效的JSONL文件"**
-   - 检查文件路径是否正确
-   - 确保文件扩展名为.jsonl
-   - 查看文件是否在指定目录
-
-2. **"解析失败"**
-   - 检查JSON格式是否正确
-   - 确认每行都是有效的JSON对象
-
-3. **"API调用失败"**
-   - 检查API Key是否正确配置
-   - 确认网络连接正常
-   - 验证账户余额是否充足
-
-4. **"内存不足"**
-   - 减小max-size参数
-   - 分批处理大文件
-
-### 调试模式
-遇到问题时，可以启用详细输出：
-
-```bash
-# 查看详细错误信息
-python src/main.py --file data/net.jsonl 2>&1 | tee debug.log
-```
-
-## 🚧 开发和扩展
-
-### 添加新的AI服务商
-1. 在 `src/ai_client.py` 中创建新的客户端类
-2. 在 `config/ai_providers.yaml` 中添加配置
-3. 在 `get_ai_client()` 函数中注册
-
-### 自定义分析规则
-1. 在 `src/log_analyzer.py` 中添加新的分析方法
-2. 在 `analyze()` 方法中调用新方法
-3. 在 `src/reporter.py` 中添加报告输出
-
-### 运行测试
-```bash
-# 安装测试依赖
-pip install pytest pytest-cov
-
-# 运行测试
-pytest tests/
-
-# 生成覆盖率报告
-pytest tests/ --cov=src --cov-report=html
-```
 
 ## 📄 许可证
 
 本项目仅供学习和研究使用。请遵守相关法律法规。
-
-## 🤝 贡献
-
-欢迎提交问题报告和建议！
-
-## 📞 联系方式
-
-如有问题或建议，请通过以下方式联系：
-- 创建GitHub Issue
-- 发送邮件到维护者
-
----
-
-*项目名称: Windows网络流量智能分析工具*
-*版本: v1.2.0*
-*最后更新: 2026-01-23*
-
-## 🆕 v1.2.0 更新内容
-
-### 新增功能
-- ✅ **OpenAI GPT 集成** - 支持所有 OpenAI 模型（GPT-4o、GPT-4 Turbo、GPT-3.5 Turbo 等）
-- ✅ **模型自由选择** - 用户可在配置文件中指定任意 OpenAI 模型
-- ✅ **兼容 API 支持** - 支持 OpenAI 兼容的第三方 API 服务
-- ✅ **命令行支持** - 新增 openai 模型选项
