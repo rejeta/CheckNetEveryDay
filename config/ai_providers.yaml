@@ -1,0 +1,42 @@
+# AI服务商配置文件
+
+# 智谱AI (https://open.bigmodel.cn/)
+zhipu:
+  name: 智谱AI
+  # API基础URL
+  api_base: https://open.bigmodel.cn/api/paas/v4/chat/completions
+  # 模型名称
+  model: glm-4
+  # 请求超时时间(秒)
+  timeout: 30
+  # 最大重试次数
+  max_retries: 3
+
+# 阿里云Qwen (https://dashscope.aliyuncs.com/)
+qwen:
+  name: 阿里云Qwen
+  api_base: https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+  model: qwen-plus
+  timeout: 30
+  max_retries: 3
+
+# 月之暗面Kimi (https://api.moonshot.cn/)
+kimi:
+  name: 月之暗面Kimi
+  api_base: https://api.moonshot.cn/v1/chat/completions
+  model: moonshot-v1-8k
+  timeout: 30
+  max_retries: 3
+
+
+# OpenAI GPT (https://openai.com/)
+openai:
+  name: OpenAI GPT
+  # API基础URL (支持官方API和兼容API)
+  api_base: https://api.openai.com/v1/chat/completions
+  # 模型名称 (用户可自行修改为其他模型，如 gpt-4-turbo, gpt-3.5-turbo 等)
+  model: gpt-4o
+  # 请求超时时间(秒)
+  timeout: 30
+  # 最大重试次数
+  max_retries: 3

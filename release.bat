@@ -1,0 +1,1 @@
+pyinstaller --onefile --clean --console --name MyChecker --paths ./src src/main.py
